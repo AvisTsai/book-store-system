@@ -12,6 +12,10 @@
   <p>標籤: {{ book.tags.all | join:', ' }}</p>
 
   <a href="{% url 'books:index' %}" class="btn btn-primary"><< Back</a>
-  <a href="{% url 'books:edit' book.id %}" class="btn btn-info">Edit</a>
-  <a href="{% url 'books:delete' book.id %}" class="btn btn-danger">Delete</a>
+  {% if  perms.books.edit_book %}
+  <a href="{% url 'books:edit' %}" class="btn btn-outline-info float-right">Edit</a>
+  {% endif %}
+  {% if  perms.books.delete_book %}
+  <a href="{% url 'books:delete' %}" class="btn btn-outline-info float-right">Delete</a>
+  {% endif %}
 {% endblock %}

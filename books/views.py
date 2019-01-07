@@ -10,7 +10,9 @@ from .models import Book
 @login_required
 def index(request):
     books = Book.objects.all()
+    print(type(books))
     return render(request, 'books/index.html', {'books': books})
+    
 
 @login_required
 def show(request, pk):
@@ -18,7 +20,7 @@ def show(request, pk):
     return render(request, 'books/show.html', {'book': book})
 
 
-@permission_required('books.add_book', login_url = 'permission_denied')
+@permission_required('books.add_book', raise_exception=True)
 def add(request):
     form = BookForm(request.POST or None)
     if form.is_valid():
@@ -28,7 +30,7 @@ def add(request):
 
     return render(request, 'books/add.html', {'form': form})
 
-@login_required
+@permission_required('books.edit_book', raise_exception=True)
 def edit(request, pk):
     book = get_object_or_404(Book, pk=pk)
     form = BookForm(request.POST or None, instance=book)
@@ -39,7 +41,7 @@ def edit(request, pk):
 
     return render(request, 'books/edit.html', {'form': form})
 
-@login_required
+@permission_required('books.delete_book', raise_exception=True)
 def delete(request, pk):
     book = get_object_or_404(Book, pk=pk)
     form = DeleteConfirmForm(request.POST or None)
